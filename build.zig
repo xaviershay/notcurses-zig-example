@@ -88,6 +88,7 @@ pub fn build(b: *std.Build) void {
     exe_module.linkLibrary(notcurses);
     exe_module.linkSystemLibrary("qrcodegen", .{});
     exe_module.linkSystemLibrary("deflate", .{});
+    exe_module.linkSystemLibrary("tinfo", .{});
     exe_module.linkSystemLibrary("ncurses", .{});
     exe_module.linkSystemLibrary("readline", .{});
     exe_module.linkSystemLibrary("unistring", .{});
