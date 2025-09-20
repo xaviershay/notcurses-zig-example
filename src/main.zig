@@ -13,9 +13,9 @@ fn linear_transition(start: anytype, end: anytype, duration: u64, diff: u64) @Ty
 
 fn transition_rgb(start: u32, end: u32, duration: u64, diff: u64) u32 {
     var rgb: u32 = 0;
-    var r = linear_transition(@as(c_int, @intCast(nc.ncchannel_r(start))), @as(c_int, @intCast(nc.ncchannel_r(end))), duration, diff);
-    var g = linear_transition(@as(c_int, @intCast(nc.ncchannel_g(start))), @as(c_int, @intCast(nc.ncchannel_g(end))), duration, diff);
-    var b = linear_transition(@as(c_int, @intCast(nc.ncchannel_b(start))), @as(c_int, @intCast(nc.ncchannel_b(end))), duration, diff);
+    const r = linear_transition(@as(c_int, @intCast(nc.ncchannel_r(start))), @as(c_int, @intCast(nc.ncchannel_r(end))), duration, diff);
+    const g = linear_transition(@as(c_int, @intCast(nc.ncchannel_g(start))), @as(c_int, @intCast(nc.ncchannel_g(end))), duration, diff);
+    const b = linear_transition(@as(c_int, @intCast(nc.ncchannel_b(start))), @as(c_int, @intCast(nc.ncchannel_b(end))), duration, diff);
     nc.ncchannel_set_rgb8_clipped(&rgb, r, g, b);
     return rgb;
 }
@@ -37,8 +37,8 @@ fn make_boxes_start(dimy: anytype, dimx: anytype) [BOX_NUM][4]c_int {
     {
         var i: usize = 0;
         while (i < bs.len) : (i += 1) {
-            var y: c_int = -1;
-            var x: c_int = @divTrunc(@as(c_int, @intCast(dimx)), 2);
+            const y: c_int = -1;
+            const x: c_int = @divTrunc(@as(c_int, @intCast(dimx)), 2);
             bs[i][0] = y;
             bs[i][1] = x;
             bs[i][2] = y + 2;
@@ -53,8 +53,8 @@ fn make_boxes_bottom_out(dimy: anytype, dimx: anytype) [BOX_NUM][4]c_int {
     {
         var i: usize = 0;
         while (i < bs.len) : (i += 1) {
-            var y: c_int = (@as(c_int, @intCast(dimy)) + 4);
-            var x: c_int = @divTrunc(@as(c_int, @intCast(dimx)), 2);
+            const y: c_int = (@as(c_int, @intCast(dimy)) + 4);
+            const x: c_int = @divTrunc(@as(c_int, @intCast(dimx)), 2);
             bs[i][0] = y;
             bs[i][1] = x;
             bs[i][2] = y + 2;
@@ -65,29 +65,29 @@ fn make_boxes_bottom_out(dimy: anytype, dimx: anytype) [BOX_NUM][4]c_int {
 }
 
 fn make_boxes_arranged(dim_y: anytype, dim_x: anytype) [BOX_NUM][4]c_int {
-    var dimx = @as(c_int, @intCast(dim_x));
-    var dimy = @as(c_int, @intCast(dim_y));
-    var x0: c_int = 2;
-    var x1 = @divFloor(dimx * 40, 100);
-    var x2 = @divFloor(dimx * 55, 100);
-    var x3 = @divFloor(dimx * 85, 100);
-    var x4 = dimx;
-    var y0: c_int = 1;
-    var y1 = @divFloor(dimy * 18, 100);
-    var y2 = @divFloor(dimy * 22, 100);
-    var y3 = @divFloor(dimy * 35, 100);
-    var y4 = @divFloor(dimy * 55, 100);
-    var y5 = @divFloor(dimy * 70, 100);
-    var y6 = dimy;
-    var bs = [BOX_NUM][4]c_int{ .{ y0, x0, y5, x1 }, .{ y5, x0, y6, x1 }, .{ y0, x1, y2, x2 }, .{ y2, x1, y5, x2 }, .{ y5, x1, y6, x2 }, .{ y0, x2, y3, x3 }, .{ y3, x2, y4, x3 }, .{ y4, x2, y6, x4 }, .{ y0, x3, y1, x4 }, .{ y1, x3, y4, x4 } };
+    const dimx = @as(c_int, @intCast(dim_x));
+    const dimy = @as(c_int, @intCast(dim_y));
+    const x0: c_int = 2;
+    const x1 = @divFloor(dimx * 40, 100);
+    const x2 = @divFloor(dimx * 55, 100);
+    const x3 = @divFloor(dimx * 85, 100);
+    const x4 = dimx;
+    const y0: c_int = 1;
+    const y1 = @divFloor(dimy * 18, 100);
+    const y2 = @divFloor(dimy * 22, 100);
+    const y3 = @divFloor(dimy * 35, 100);
+    const y4 = @divFloor(dimy * 55, 100);
+    const y5 = @divFloor(dimy * 70, 100);
+    const y6 = dimy;
+    const bs = [BOX_NUM][4]c_int{ .{ y0, x0, y5, x1 }, .{ y5, x0, y6, x1 }, .{ y0, x1, y2, x2 }, .{ y2, x1, y5, x2 }, .{ y5, x1, y6, x2 }, .{ y0, x2, y3, x3 }, .{ y3, x2, y4, x3 }, .{ y4, x2, y6, x4 }, .{ y0, x3, y1, x4 }, .{ y1, x3, y4, x4 } };
     return bs;
 }
 
 fn make_boxes_grid(dimy: anytype, dimx: anytype) [BOX_NUM][4]c_int {
     const boxh: c_int = @divTrunc(@as(c_int, @intCast(dimy)), 5);
     const boxw: c_int = (boxh * 2);
-    var y0: c_int = @divFloor(@as(c_int, @intCast(dimy)) * 20, 100);
-    var x0: c_int = @divFloor(@as(c_int, @intCast(dimx)) * 20, 100);
+    const y0: c_int = @divFloor(@as(c_int, @intCast(dimy)) * 20, 100);
+    const x0: c_int = @divFloor(@as(c_int, @intCast(dimx)) * 20, 100);
     var bs: [BOX_NUM][4]c_int = undefined;
     {
         var i: usize = 0;
@@ -158,7 +158,7 @@ fn draw_boxes_bordered(planes: [BOX_NUM]*nc.ncplane) !void {
     {
         var i: usize = 0;
         while (i < planes.len) : (i += 1) {
-            var plane = planes[i];
+            const plane = planes[i];
             nc.ncplane_erase(plane);
             try nc.err(nc.ncplane_cursor_move_yx(plane, 0, 0));
             _ = nc.ncplane_rounded_box(plane, 0, 0, nc.ncplane_dim_y(plane) - 1, nc.ncplane_dim_x(plane) - 1, 0);
@@ -218,7 +218,7 @@ const PositionContext = struct {
     to: c_int,
 };
 fn run_transition(ncs: *nc.notcurses, duration: u64, ctx: anytype, render: fn (@TypeOf(ctx), u64, u64) nc.Error!void) !void {
-    var time_start: u64 = time.get_time_ns();
+    const time_start: u64 = time.get_time_ns();
     var t: u64 = time_start;
     while (t < (time_start + duration)) : (t = time.get_time_ns()) {
         try render(ctx, t - time_start, duration);
@@ -240,11 +240,11 @@ fn run_serial_transition(ncs: *nc.notcurses, duration: u64, comptime render: fn 
 
 pub fn main() !void {
     var nc_opts: nc.notcurses_options = nc.default_notcurses_options;
-    var ncs: *nc.notcurses = (nc.notcurses_core_init(&nc_opts, null) orelse @panic("notcurses_core_init() failed"));
+    const ncs: *nc.notcurses = (nc.notcurses_core_init(&nc_opts, null) orelse @panic("notcurses_core_init() failed"));
     defer _ = nc.notcurses_stop(ncs);
     var dimy: c_uint = undefined;
     var dimx: c_uint = undefined;
-    var n: *nc.ncplane = (nc.notcurses_stddim_yx(ncs, &dimy, &dimx) orelse unreachable);
+    const n: *nc.ncplane = (nc.notcurses_stddim_yx(ncs, &dimy, &dimx) orelse unreachable);
     dimx = @max(dimx, 80);
     dimy = @max(dimy, 25);
     var std_chan: u64 = 0;
@@ -315,14 +315,14 @@ pub fn main() !void {
     outer: {
         var loop: usize = 0;
         while (true) : (loop += 1) {
-            var duration: u64 = 1.0E9;
-            var time_start: u64 = time.get_time_ns();
+            const duration: u64 = 1.0E9;
+            const time_start: u64 = time.get_time_ns();
             var t: u64 = time_start;
             while (t < (time_start + duration)) : (t = time.get_time_ns()) {
                 {
                     var i: usize = 0;
                     while (i < box_planes.len) : (i += 1) {
-                        var plane = box_planes[i];
+                        const plane = box_planes[i];
                         const colors = [4]u32{ box_colors[i], 16777215, box_colors[i], 0 };
                         var corners: [4]u32 = undefined;
                         {
@@ -336,7 +336,7 @@ pub fn main() !void {
                 }
                 try nc.err(nc.notcurses_render(ncs));
                 time.sleep_until_ns(t + step_ns);
-                var keypress: c_uint = nc.notcurses_get_nblock(ncs, null);
+                const keypress: c_uint = nc.notcurses_get_nblock(ncs, null);
                 if (keypress == 'q') {
                     break :outer;
                 }

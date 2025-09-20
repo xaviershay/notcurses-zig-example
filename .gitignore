@@ -4,3 +4,4 @@ deps/notcurses
 .idea
 .clj-kondo
 .nrepl-port
+.zig-cache
