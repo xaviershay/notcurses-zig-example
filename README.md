@@ -21,8 +21,13 @@ git clone https://github.com/dankamongmen/notcurses.git deps/notcurses
 cd deps/notcurses
 mkdir build && cd build
 cmake -DUSE_MULTIMEDIA=none -DUSE_PANDOC=OFF ..
+
+# OLD COMMENT
 # We just need `cmake` to generate some headers, no need to actually `make` since rest will be handled by Zig
 # In case of errors, try `git checkout v3.0.9` and re-run cmake as I tested it with this version.
+
+# 0.15 UPDATE: The current build script requires make to built libncurses-core
+make
 ```
 
 ### Build and run

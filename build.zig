@@ -101,8 +101,8 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(exe);
     exe.linkLibC();
 
-    // exe.linkSystemLibrary("notcurses-core");
-    // exe.addObjectFile(notcurses_source_path ++ "/build/libnotcurses-core.a");
+    exe.linkSystemLibrary("notcurses-core");
+    exe.addObjectFile(b.path(notcurses_source_path ++ "/build/libnotcurses-core.a"));
 
     exe.addIncludePath(b.path(notcurses_source_path ++ "/include"));
 
